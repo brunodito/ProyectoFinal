@@ -1,0 +1,13 @@
+.title{
+text-align: center;
+font-family: Moul;
+font-size: 40px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+background: linear-gradient(90deg, #BD61DE 0%, #A6FADC 99.99%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
