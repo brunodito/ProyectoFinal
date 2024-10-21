@@ -12,11 +12,6 @@
   transition: filter 300ms;
 }
 
-.card {
-  padding: 2em;
-  flex-direction: column;
-}
-
 /* Aca empieza la app */
 
 
