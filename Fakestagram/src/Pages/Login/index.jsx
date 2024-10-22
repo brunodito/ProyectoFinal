@@ -5,6 +5,7 @@ import '../../Styles/login.css';
 function Login() {
   return (
     <>
+      <img src="../../Resource/Logo.svg" alt="Logo fakestagram"/>
       <h1 className="title">Fakestagram</h1>
       <label htmlFor='username' className='text'>Email</label>
       <input id='username' type='text' className='rectangle'/> 
