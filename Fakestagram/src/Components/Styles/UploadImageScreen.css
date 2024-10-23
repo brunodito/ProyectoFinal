@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.image {
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+}
+
+.fileInput {
+    margin-top: 10px;
+}

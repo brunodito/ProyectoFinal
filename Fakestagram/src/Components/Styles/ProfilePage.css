@@ -1,0 +1,151 @@
+.profile-page {
+    min-height: 100vh;
+    background-color: white;
+  }
+  
+  /* Header Styles */
+  .profile-header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+  
+  .username-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .icon-button {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Profile Info Styles */
+  .profile-info {
+    padding: 16px;
+  }
+  
+  .profile-main {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .profile-stats {
+    flex: 1;
+    margin-left: 32px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-number {
+    display: block;
+    font-weight: 600;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  .profile-bio {
+    margin-bottom: 16px;
+  }
+  
+  .bio-username {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .bio-text {
+    font-size: 0.875rem;
+    color: #262626;
+  }
+  
+  .edit-profile-button {
+    width: 100%;
+    padding: 6px 16px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  /* Posts Grid Styles */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background-color: #fff;
+  }
+  
+  .post-item {
+    aspect-ratio: 1;
+    position: relative;
+  }
+  
+  .post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Bottom Navigation Styles */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    border-top: 1px solid #dbdbdb;
+    z-index: 100;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+  }
+  
+  .nav-button {
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .nav-button i {
+    font-size: 1.25rem;
+  }
+  
+  .nav-profile-pic {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }

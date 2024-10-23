@@ -1,15 +1,135 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Home';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './Components/Pages/LoginPage';
+import FeedPage from './Components/Pages/FeedPage';
+import ProfilePage from './Components/Pages/ProfilePage';
+import UploadImageScreen from './Components/Pages/UploadImageScreen';
+import RegisterPage from './Components/Pages/RegisterPage';
+import SearchPage from './Components/Pages/SearchPage'; // Asegúrate de importar la nueva página
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
-  );
-}
+const API_BASE_URL = 'http://localhost:3001/api';
+
+const App = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+
+    const handleLogin = async (email, password) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Credenciales incorrectas');
+            }
+
+            const data = await response.json();
+            setUser(data);
+            setIsAuthenticated(true);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data._id);
+            return true;
+        } catch (error) {
+            console.error('Error durante la autenticación:', error);
+            return false;
+        }
+    };
+
+    const handleRegister = async (username, email, password) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en el registro');
+            }
+
+            const data = await response.json();
+            setUser(data);
+            setIsAuthenticated(true);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data._id);
+            return true;
+        } catch (error) {
+            console.error('Error durante el registro:', error);
+            return false;
+        }
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+    };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        
+        if (token && userId) {
+            // Verificar el token con la API
+            fetch(`${API_BASE_URL}/users/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Token inválido');
+            })
+            .then(userData => {
+                setUser(userData);
+                setIsAuthenticated(true);
+            })
+            .catch(() => {
+                handleLogout();
+            });
+        }
+    }, []);
+
+    return (
+        <Router>
+            <Routes>
+                <Route 
+                    path="/" 
+                    element={!isAuthenticated ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/feed" />} 
+                />
+                <Route 
+                    path="/register" 
+                    element={!isAuthenticated ? <RegisterPage onRegister={handleRegister} /> : <Navigate to="/feed" />} 
+                />
+                <Route 
+                    path="/feed" 
+                    element={isAuthenticated ? <FeedPage user={user} /> : <Navigate to="/" />} 
+                />
+                <Route 
+                    path="/profile" 
+                    element={isAuthenticated ? <ProfilePage user={user} /> : <Navigate to="/" />} 
+                />
+                <Route 
+                    path="/upload" 
+                    element={isAuthenticated ? <UploadImageScreen user={user} /> : <Navigate to="/" />} 
+                />
+                <Route 
+                    path="/search" 
+                    element={isAuthenticated ? <SearchPage /> : <Navigate to="/" />} 
+                />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
