@@ -1,0 +1,75 @@
+/* NotificacionesPage.css */
+
+.notifications-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fafafa;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.notifications-container h1 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.notifications-list {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.notification-item .icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+.notification-item.comment .icon {
+    background-image: url('https://img.icons8.com/ios-glyphs/30/823970/speech-bubble.png'); /* Icono de comentario */
+    background-color: #ffebf0;
+}
+
+.notification-item.like .icon {
+    background-image: url('https://img.icons8.com/ios-glyphs/30/823970/heart.png'); /* Icono de like */
+    background-color: #ffe6e6;
+}
+
+.notification-item.followed-post .icon {
+    background-image: url('https://img.icons8.com/ios-glyphs/30/823970/camera.png'); /* Icono de nueva publicación */
+    background-color: #e6f3ff;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-content p {
+    color: #333;
+    font-size: 1em;
+    margin: 0;
+}
+
+.time {
+    color: #999;
+    font-size: 0.85em;
+    margin-top: 4px;
+}

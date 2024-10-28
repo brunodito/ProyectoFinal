@@ -41,8 +41,8 @@ const ProfilePage = ({ user }) => {
       <header className="profile-header">
         <h1 className="username-title">{user?.username || 'Username'}</h1>
         <div className="header-buttons">
-          <button className="icon-button">+</button>
-          <button className="icon-button">≡</button>
+          <button className="icon-button" onClick={() => navigate('/upload')}>+</button>
+          <button className="icon-button" onClick={() => navigate('/settings')}>≡</button>
         </div>
       </header>
 
@@ -102,7 +102,7 @@ const ProfilePage = ({ user }) => {
           <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
           <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
           <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
-          <div className="nav-item active icon notificacion-icon" /*onClick={() => navigate('/')}*/></div>
+          <div className="nav-item active icon notification-icon"></div>
           <div className="nav-item" onClick={() => navigate('/profile')}>
               <i className="far fa-user"></i>
               <span>Perfil</span>

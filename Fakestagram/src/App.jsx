@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import LoginPage from './Components/Pages/LoginPage';
 import FeedPage from './Components/Pages/FeedPage';
 import ProfilePage from './Components/Pages/ProfilePage';
 import UploadImageScreen from './Components/Pages/UploadImageScreen';
 import RegisterPage from './Components/Pages/RegisterPage';
-import SearchPage from './Components/Pages/SearchPage'; // Asegúrate de importar la nueva página
-import './app.css'
+import SearchPage from './Components/Pages/SearchPage'; 
+import EditProfilePage from './Components/Pages/EditProfilePage'; 
+import SettingsPage from './Components/Pages/SettingsPage'; 
+import NotificacionesPage from './Components/Pages/NotificacionesPage';
+import './app.css';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
@@ -79,7 +82,6 @@ const App = () => {
         const userId = localStorage.getItem('userId');
         
         if (token && userId) {
-            // Verificar el token con la API
             fetch(`${API_BASE_URL}/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -103,32 +105,33 @@ const App = () => {
 
     return (
         <Router>
-            <Routes>
-                <Route 
-                    path="/" 
-                    element={!isAuthenticated ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/feed" />} 
-                />
-                <Route 
-                    path="/register" 
-                    element={!isAuthenticated ? <RegisterPage onRegister={handleRegister} /> : <Navigate to="/feed" />} 
-                />
-                <Route 
-                    path="/feed" 
-                    element={isAuthenticated ? <FeedPage user={user} /> : <Navigate to="/" />} 
-                />
-                <Route 
-                    path="/profile" 
-                    element={isAuthenticated ? <ProfilePage user={user} /> : <Navigate to="/" />} 
-                />
-                <Route 
-                    path="/upload" 
-                    element={isAuthenticated ? <UploadImageScreen user={user} /> : <Navigate to="/" />} 
-                />
-                <Route 
-                    path="/search" 
-                    element={isAuthenticated ? <SearchPage /> : <Navigate to="/" />} 
-                />
-            </Routes>
+            <div className="app-container">
+                <div className="navigation-bar">
+                    <Link to="/feed" className="nav-item icon home-icon"></Link>
+                    <Link to="/search" className="nav-item icon search-icon"></Link>
+                    <Link to="/upload" className="nav-item icon create-icon"></Link>
+                    <Link to="/notifications" className="nav-item icon notification-icon"></Link>
+                    <Link to="/profile" className="nav-item">
+                        <i className="far fa-user"></i>
+                        <span>Perfil</span>
+                    </Link>
+                </div>
+                
+                <Routes>
+                    {/* Rutas existentes */}
+                    <Route path="/" element={!isAuthenticated ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/feed" />} />
+                    <Route path="/register" element={!isAuthenticated ? <RegisterPage onRegister={handleRegister} /> : <Navigate to="/feed" />} />
+                    <Route path="/feed" element={isAuthenticated ? <FeedPage user={user} /> : <Navigate to="/" />} />
+                    <Route path="/profile" element={isAuthenticated ? <ProfilePage user={user} /> : <Navigate to="/" />} />
+                    <Route path="/upload" element={isAuthenticated ? <UploadImageScreen user={user} /> : <Navigate to="/" />} />
+                    <Route path="/search" element={isAuthenticated ? <SearchPage /> : <Navigate to="/" />} />
+                    
+                    {/* Nuevas rutas */}
+                    <Route path="/edit-profile" element={isAuthenticated ? <EditProfilePage /> : <Navigate to="/" />} />
+                    <Route path="/settings" element={isAuthenticated ? <SettingsPage /> : <Navigate to="/" />} />
+                    <Route path="/notifications" element={isAuthenticated ? <NotificacionesPage /> : <Navigate to="/" />} />
+                </Routes>
+            </div>
         </Router>
     );
 };
