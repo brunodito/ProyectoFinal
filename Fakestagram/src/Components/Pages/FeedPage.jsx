@@ -64,7 +64,7 @@ const FeedPage = ({ user }) => {
 
             if (response.ok) {
                 const updatedPost = await response.json();
-                setPosts(posts.map(post => 
+                setPosts(posts.map(post =>
                     post._id === postId ? updatedPost : post
                 ));
             }
@@ -107,7 +107,7 @@ const FeedPage = ({ user }) => {
 
     if (loading) return <div className="loading">Cargando publicaciones...</div>;
     if (error) return <div className="error">{error}</div>;
-    
+
     return (
         <div className="feed-container">
             <div className="header">
@@ -125,9 +125,9 @@ const FeedPage = ({ user }) => {
                         <div key={post._id} className="post-card">
                             <div className="post-header">
                                 <div className="post-header-left">
-                                    <img 
-                                        src={post.user.profilePicture || '/default-avatar.png'} 
-                                        alt={post.user.username} 
+                                    <img
+                                        src={post.user.profilePicture || '/default-avatar.png'}
+                                        alt={post.user.username}
                                         className="user-avatar"
                                     />
                                     <span className="username">{post.user.username}</span>
@@ -135,20 +135,20 @@ const FeedPage = ({ user }) => {
                                 <i className="fas fa-ellipsis-h"></i>
                             </div>
 
-                            <img 
-                                src={post.imageUrl} 
-                                alt="Post content" 
+                            <img
+                                src={post.imageUrl}
+                                alt="Post content"
                                 className="post-image"
                             />
 
                             <div className="post-actions">
-                                <button 
+                                <button
                                     onClick={() => handleLike(post._id)}
                                     className={`like-button ${post.likes.includes(user._id) ? 'liked' : ''}`}
                                 >
                                     <i className={`${post.likes.includes(user._id) ? 'fas' : 'far'} fa-heart`}></i>
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => setCommentingOn(post._id)}
                                     className="comment-button"
                                 >
@@ -186,7 +186,7 @@ const FeedPage = ({ user }) => {
                                     placeholder="Añade un comentario..."
                                     className="comment-input"
                                 />
-                                <button 
+                                <button
                                     onClick={() => handleComment(post._id)}
                                     className="send-comment-button"
                                     disabled={!newComment.trim()}
@@ -200,22 +200,10 @@ const FeedPage = ({ user }) => {
             )}
 
             <div className="navigation-bar">
-                <div className="nav-item active">
-                    <i className="fas fa-home"></i>
-                    <span>Inicio</span>
-                </div>
-                <div className="nav-item" onClick={() => navigate('/search')}>
-                    <i className="fas fa-search"></i>
-                    <span>Buscar</span>
-                </div>
-                <div className="nav-item" onClick={() => navigate('/upload')}>
-                    <i className="far fa-plus-square"></i>
-                    <span>Crear</span>
-                </div>
-                <div className="nav-item">
-                    <i className="far fa-heart"></i>
-                    <span>Notificaciones</span>
-                </div>
+                <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
+                <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
+                <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
+                <div className="nav-item active icon notificacion-icon" /*onClick={() => navigate('/')}*/></div>
                 <div className="nav-item" onClick={() => navigate('/profile')}>
                     <i className="far fa-user"></i>
                     <span>Perfil</span>

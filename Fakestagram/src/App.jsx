@@ -6,6 +6,7 @@ import ProfilePage from './Components/Pages/ProfilePage';
 import UploadImageScreen from './Components/Pages/UploadImageScreen';
 import RegisterPage from './Components/Pages/RegisterPage';
 import SearchPage from './Components/Pages/SearchPage'; // Asegúrate de importar la nueva página
+import './app.css'
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
