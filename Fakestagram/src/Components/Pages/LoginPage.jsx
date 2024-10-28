@@ -27,7 +27,7 @@ const LoginPage = ({ onLogin }) => {
     return (
         <div className="login-container">
             <div className="login-box">
-                <h2 className="title">Login</h2>
+                <h2 className="title">Fakestagram</h2>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email</label>
                     <input 
@@ -36,6 +36,7 @@ const LoginPage = ({ onLogin }) => {
                         placeholder="Email" 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)} 
+                        className="rectangle" // Añadir clase aquí
                     />
                     <label htmlFor="password">Password</label>
                     <input 
@@ -44,6 +45,7 @@ const LoginPage = ({ onLogin }) => {
                         placeholder="Password" 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)} 
+                        className="rectangle" // Añadir clase aquí
                     />
                     <button type="submit" className="login-button">Login</button>
                 </form>
