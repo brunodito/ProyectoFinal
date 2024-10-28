@@ -1,4 +1,4 @@
-/* Contenedor principal para centrar el contenido */
+/* Asegúrate de que el body y el html ocupen toda la altura de la ventana */
 body, html {
     margin: 0;
     padding: 0;
@@ -9,12 +9,21 @@ body, html {
     overflow: hidden; /* Evita el scroll */
 }
 
-.container {
+.login-container {
+    width: 390px; /* Ancho del contenedor de login */
+    height: 844px; /* Alto del contenedor de login */
     display: flex;
-    flex-direction: column; /* Asegúrate de que los elementos se apilen verticalmente */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente */
     align-items: center; /* Centra horizontalmente */
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para móviles */
+    width: 100%; /* Usar el ancho completo del contenedor */
     padding: 20px; /* Espaciado interior */
     box-sizing: border-box; /* Incluye padding en el ancho total */
 }
@@ -38,36 +47,36 @@ label {
     margin-bottom: 5px;
 }
 
-input, .rectangle {
-    width: 100%; /* Cambia el ancho a 100% */
-    max-width: 359px; /* Ancho máximo */
-    height: 50px;
-    border-radius: 10px;
-    background: #D9D9D9;
+.rectangle {
+    width: 359px; /* Ancho del input */
+    height: 50px; /* Alto del input */
+    border-radius: 10px; /* Bordes redondeados */
+    background: #D9D9D9; /* Color de fondo */
     margin-bottom: 10px; /* Espaciado entre elementos */
 }
 
-.login-button, .register-button {
+.login-button {
     width: 100%; /* Cambia el ancho a 100% */
     max-width: 285.714px; /* Ancho máximo */
-    height: 50px;
-    border-radius: 10px;
+    height: 50px; /* Alto del botón */
+    border-radius: 10px; /* Bordes redondeados */
     display: flex;
     justify-content: center;
     align-items: center; 
-    color: #FFF;
+    color: #FFF; /* Color del texto para el botón de login */
     text-align: center;
-    font-family: Inter;
-    font-size: 15px;
-    font-weight: 600;
+    font-family: Inter; /* Cambia según tus fuentes */
+    font-size: 15px; /* Tamaño de fuente */
+    font-weight: 600; /* Peso de fuente */
     margin: 0 auto; 
-    line-height: normal; 
+    line-height: 100px; 
     background: #BD61DE; /* Color de fondo para el botón de login */
+    margin-top: 20px;
 }
 
 .register-button {
-    background: transparent; /* O puedes usar otro color */
-    color: black;
+    color: black; /* Color del texto */
+    margin-top: 10px; /* Espaciado superior */
 }
 
 .text {
