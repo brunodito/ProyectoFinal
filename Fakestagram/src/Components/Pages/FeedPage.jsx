@@ -20,16 +20,16 @@ const FeedPage = ({ user }) => {
             user: {
                 _id: 'user1',
                 username: 'usuario_ejemplo',
-                profilePicture: '/default-avatar.png', // Puedes usar una imagen de perfil de ejemplo
+                profilePicture: '/default-avatar.png',
             },
-            imageUrl: 'https://via.placeholder.com/600x400', // URL de la imagen de ejemplo
+            imageUrl: 'https://via.placeholder.com/600x400',
             likes: [],
             comments: [],
             caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
         };
 
-        setPosts([examplePost]); // Establece la publicación de ejemplo como el estado inicial
-        setLoading(false); // Cambia el estado de loading a false
+        setPosts([examplePost]);
+        setLoading(false);
     }, []);
 
     const fetchPosts = async () => {
@@ -105,6 +105,10 @@ const FeedPage = ({ user }) => {
         }
     };
 
+    if (!user) {
+        return <div>Inicia sesión para ver el contenido del feed.</div>;
+    }
+
     if (loading) return <div className="loading">Cargando publicaciones...</div>;
     if (error) return <div className="error">{error}</div>;
     
@@ -126,17 +130,17 @@ const FeedPage = ({ user }) => {
                             <div className="post-header">
                                 <div className="post-header-left">
                                     <img 
-                                        src={post.user.profilePicture || '/default-avatar.png'} 
-                                        alt={post.user.username} 
+                                        src={post.user?.profilePicture || '/default-avatar.png'} 
+                                        alt={post.user?.username || 'Usuario'} 
                                         className="user-avatar"
                                     />
-                                    <span className="username">{post.user.username}</span>
+                                    <span className="username">{post.user?.username || 'Usuario desconocido'}</span>
                                 </div>
                                 <i className="fas fa-ellipsis-h"></i>
                             </div>
 
                             <img 
-                                src={post.imageUrl} 
+                                src={post.imageUrl || 'https://via.placeholder.com/600x400'} 
                                 alt="Post content" 
                                 className="post-image"
                             />
@@ -162,14 +166,14 @@ const FeedPage = ({ user }) => {
 
                             {post.caption && (
                                 <div className="post-caption">
-                                    <span className="username">{post.user.username}</span> {post.caption}
+                                    <span className="username">{post.user?.username}</span> {post.caption}
                                 </div>
                             )}
 
                             <div className="comments-section">
                                 {post.comments.map(comment => (
                                     <div key={comment._id} className="comment">
-                                        <span className="username">{comment.user.username}</span> {comment.content}
+                                        <span className="username">{comment.user?.username}</span> {comment.content}
                                     </div>
                                 ))}
                             </div>
