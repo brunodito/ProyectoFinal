@@ -1,7 +1,37 @@
+/* Asegúrate de que el body y el html ocupen toda la altura de la ventana */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Evita el scroll */
+}
+
+.login-container {
+    width: 390px; /* Ancho del contenedor de login */
+    height: 844px; /* Alto del contenedor de login */
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    width: 100%; /* Usar el ancho completo del contenedor */
+    padding: 20px; /* Espaciado interior */
+    box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
 .title {
     text-align: center;
     font-family: Moul;
-    font-size: 40px;
+    font-size: 2.5rem; /* Ajusta el tamaño con unidades relativas */
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -17,66 +47,47 @@ label {
     margin-bottom: 5px;
 }
 
-input {
-    display: block;
-    margin-bottom: 20px;
-    width: 100%; 
+.rectangle {
+    width: 359px; /* Ancho del input */
+    height: 50px; /* Alto del input */
+    border-radius: 10px; /* Bordes redondeados */
+    background: #D9D9D9; /* Color de fondo */
+    margin-bottom: 10px; /* Espaciado entre elementos */
 }
 
 .login-button {
-    width: 285.714px;
-    height: 50px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: #BD61DE;
+    width: 100%; /* Cambia el ancho a 100% */
+    max-width: 285.714px; /* Ancho máximo */
+    height: 50px; /* Alto del botón */
+    border-radius: 10px; /* Bordes redondeados */
     display: flex;
     justify-content: center;
     align-items: center; 
-    color: #FFF;
+    color: #FFF; /* Color del texto para el botón de login */
     text-align: center;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
+    font-family: Inter; /* Cambia según tus fuentes */
+    font-size: 15px; /* Tamaño de fuente */
+    font-weight: 600; /* Peso de fuente */
     margin: 0 auto; 
-    line-height: normal; 
+    line-height: 100px; 
+    background: #BD61DE; /* Color de fondo para el botón de login */
+    margin-top: 20px;
 }
 
 .register-button {
-    display: flex;
-    width: 285.714px;
-    height: 50px;
-    flex-direction: column;
-    justify-content: center;
-    flex-shrink: 0;
-    color: #202020;
-    text-align: center;
-    font-family: Inter;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-
-.rectangle {
-    width: 359px;
-    height: 50px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: #D9D9D9;
+    color: black; /* Color del texto */
+    margin-top: 10px; /* Espaciado superior */
 }
 
 .text {
     display: flex;
-    width: 115px;
-    height: 17px;
+    width: auto; /* Ajusta a automático para el texto */
+    height: auto; /* Ajusta a automático */
     flex-direction: column;
     justify-content: flex-end;
-    flex-shrink: 0;
     color: #202020;
     font-family: Inter;
     font-size: 15px;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
 }

@@ -282,3 +282,7 @@
 .nav-item span {
     color: #262626;
 }
+
+.stat-item {
+    padding: 5px;
+}
