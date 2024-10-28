@@ -71,6 +71,29 @@ const UploadImageScreen = () => {
         <div className="upload-container">
             <h1>Subir una Imagen</h1>
             {error && <div className="error-message">{error}</div>}
+
+            <div className="navigation-bar">
+                <div className="nav-item active" onClick={() => navigate('/feed')}>
+                    <i className="fas fa-home"></i>
+                    <span>Inicio</span>
+                </div>
+                <div className="nav-item" onClick={() => navigate('/search')}>
+                    <i className="fas fa-search"></i>
+                    <span>Buscar</span>
+                </div>
+                <div className="nav-item" onClick={() => navigate('/upload')}>
+                    <i className="far fa-plus-square"></i>
+                    <span>Crear</span>
+                </div>
+                <div className="nav-item">
+                    <i className="far fa-heart"></i>
+                    <span>Notificaciones</span>
+                </div>
+                <div className="nav-item" onClick={() => navigate('/profile')}>
+                    <i className="far fa-user"></i>
+                    <span>Perfil</span>
+                </div>
+            </div>
             
             <input 
                 type="file" 
