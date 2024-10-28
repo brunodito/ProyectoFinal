@@ -98,27 +98,28 @@ const ProfilePage = ({ user }) => {
 
       {/* Bottom Navigation */}
       <nav className="bottom-nav">
-        <div className="nav-buttons">
-          <button onClick={() => navigate('/feed')} className="nav-button">
-            <i className="fas fa-home"></i>
-          </button>
-          <button className="nav-button">
-            <i className="fas fa-search"></i>
-          </button>
-          <button onClick={() => navigate('/upload')} className="nav-button">
-            <i className="far fa-plus-square"></i>
-          </button>
-          <button className="nav-button">
-            <i className="far fa-heart"></i>
-          </button>
-          <button className="nav-button">
-            <img 
-              src={user?.profilePicture || '/default-avatar.png'} 
-              alt="Profile" 
-              className="nav-profile-pic"
-            />
-          </button>
-        </div>
+        <div className="navigation-bar">
+          <div className="nav-item active" onClick={() => navigate('/feed')}>
+              <i className="fas fa-home"></i>
+              <span>Inicio</span>
+          </div>
+          <div className="nav-item" onClick={() => navigate('/search')}>
+              <i className="fas fa-search"></i>
+              <span>Buscar</span>
+          </div>
+          <div className="nav-item" onClick={() => navigate('/upload')}>
+              <i className="far fa-plus-square"></i>
+              <span>Crear</span>
+          </div>
+          <div className="nav-item">
+              <i className="far fa-heart"></i>
+              <span>Notificaciones</span>
+          </div>
+          <div className="nav-item" onClick={() => navigate('/profile')}>
+              <i className="far fa-user"></i>
+              <span>Perfil</span>
+          </div>
+          </div>
       </nav>
     </div>
   );
