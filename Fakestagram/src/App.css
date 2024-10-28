@@ -21,3 +21,27 @@
 /* Aca empieza la app */
 
 
+.icon {
+  height: 5px;
+  width: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+}
+
+.home-icon{
+  background-image: url('./Resource/home.png'); 
+}
+
+.search-icon{
+  background-image: url('./Resource/search2.png');
+}
+
+.create-icon{
+  background-image: url('./Resource/create.png');
+}
+
+.notificacion-icon{
+  background-image: url('./Resource/notificacion.png');
+}
