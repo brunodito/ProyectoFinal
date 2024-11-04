@@ -203,16 +203,16 @@ const FeedPage = ({ user }) => {
                 </div>
             )}
 
-            <div className="navigation-bar">
+            {/* <div className="navigation-bar">
                 <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
                 <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
-                <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
-                <div className="nav-item active icon notificacion-icon" /*onClick={() => navigate('/')}*/></div>
-                <div className="nav-item" onClick={() => navigate('/profile')}>
+                <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div> 
+                <div className="nav-item active icon notificacion-icon¨></div>
+                 <div className="nav-item" onClick={() => navigate('/profile')}>
                     <i className="far fa-user"></i>
                     <span>Perfil</span>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
