@@ -53,11 +53,8 @@ const SearchPage = () => {
                 <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
                 <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
                 <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
-                <div className="nav-item active icon notificacion-icon" /*onClick={() => navigate('/')}*/></div>
-                <div className="nav-item" onClick={() => navigate('/profile')}>
-                    <i className="far fa-user"></i>
-                    <span>Perfil</span>
-                </div>
+                <div className="nav-item active icon notificacion-icon" onClick={() => navigate('/notifications')}></div>
+                <div className="nav-item active icon profile-icon" onClick={() => navigate('/profile')}></div>
             </div>
             <h1>Buscar Usuarios</h1>
             <form onSubmit={handleSearch} className="search-form">

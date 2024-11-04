@@ -79,11 +79,13 @@
   .bio-username {
     font-weight: 600;
     margin-bottom: 4px;
+    text-align: left;
   }
   
   .bio-text {
     font-size: 0.875rem;
     color: #262626;
+    text-align: left;
   }
   
   .edit-profile-button {

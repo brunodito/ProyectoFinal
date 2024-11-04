@@ -8,17 +8,15 @@ const LoginPage = ({ onLogin }) => {
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); // Evitar que la página se recargue
+        event.preventDefault();
         console.log("Iniciando sesión con:", { email, password });
 
-        // Llamar a la función onLogin pasada como prop
         await onLogin(email, password);
         
-        // Verificar si el token se estableció en el almacenamiento local
         const token = localStorage.getItem('token');
         if (token) {
             console.log("Redirigiendo a /feed");
-            navigate('/feed'); // Redirigir al feed
+            navigate('/feed');
         } else {
             alert('Error en el inicio de sesión, verifica tus credenciales');
         }
@@ -27,6 +25,8 @@ const LoginPage = ({ onLogin }) => {
     return (
         <div className="login-container">
             <div className="login-box">
+                <div className="home-logo"></div>
+
                 <h2 className="title">Fakestagram</h2>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email</label>
@@ -36,7 +36,7 @@ const LoginPage = ({ onLogin }) => {
                         placeholder="Email" 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)} 
-                        className="rectangle" // Añadir clase aquí
+                        className="rectangle"
                     />
                     <label htmlFor="password">Password</label>
                     <input 
@@ -45,7 +45,7 @@ const LoginPage = ({ onLogin }) => {
                         placeholder="Password" 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)} 
-                        className="rectangle" // Añadir clase aquí
+                        className="rectangle"
                     />
                     <button type="submit" className="login-button">Login</button>
                 </form>
