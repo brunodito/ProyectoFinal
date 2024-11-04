@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../Styles/NotificacionesPage.css'; // Asegúrate de que la ruta sea correcta
 
 const NotificacionesPage = () => {
+
+    const navigate = useNavigate();
     const notifications = [
         {
             id: 1,
@@ -37,6 +40,17 @@ const NotificacionesPage = () => {
                     </div>
                 ))}
             </div>
+
+        {/* Bottom Navigation */}
+            <nav className="bottom-nav">
+            <div className="navigation-bar">
+                <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
+                <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
+                <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
+                <div className="nav-item active icon notificacion-icon" onClick={() => navigate('/notifications')}></div>
+                <div className="nav-item active icon profile-icon" onClick={() => navigate('/profile')}></div>
+            </div>
+            </nav>
         </div>
     );
 };

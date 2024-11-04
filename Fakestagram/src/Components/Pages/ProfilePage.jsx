@@ -102,11 +102,8 @@ const ProfilePage = ({ user }) => {
           <div className="nav-item active icon home-icon" onClick={() => navigate('/feed')}></div>
           <div className="nav-item active icon search-icon" onClick={() => navigate('/search')}></div>
           <div className="nav-item active icon create-icon" onClick={() => navigate('/upload')}></div>
-          <div className="nav-item active icon notification-icon"></div>
-          <div className="nav-item" onClick={() => navigate('/profile')}>
-              <i className="far fa-user"></i>
-              <span>Perfil</span>
-          </div>
+          <div className="nav-item active icon notificacion-icon" onClick={() => navigate('/notifications')}></div>
+          <div className="nav-item active icon profile-icon" onClick={() => navigate('/profile')}></div>
         </div>
       </nav>
     </div>

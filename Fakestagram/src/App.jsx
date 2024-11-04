@@ -106,17 +106,7 @@ const App = () => {
     return (
         <Router>
             <div className="app-container">
-                <div className="navigation-bar">
-                    <Link to="/feed" className="nav-item icon home-icon"></Link>
-                    <Link to="/search" className="nav-item icon search-icon"></Link>
-                    <Link to="/upload" className="nav-item icon create-icon"></Link>
-                    <Link to="/notifications" className="nav-item icon notification-icon"></Link>
-                    <Link to="/profile" className="nav-item">
-                        <i className="far fa-user"></i>
-                        <span>Perfil</span>
-                    </Link>
-                </div>
-                
+           
                 <Routes>
                     {/* Rutas existentes */}
                     <Route path="/" element={!isAuthenticated ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/feed" />} />
