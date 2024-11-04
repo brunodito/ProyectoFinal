@@ -45,3 +45,23 @@
 .notificacion-icon{
   background-image: url('./Resource/notificacion.png');
 }
+
+.profile-icon{
+  background-image: url('./Resource/profile.png');
+}
+
+.logo {
+  height: 5px;
+  width: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+}
+
+.home-logo{
+  background-image: url('./Resource/fakestagram.png');
+  width: 85px;
+  height: 85px;
+  flex-shrink: 0;
+}
