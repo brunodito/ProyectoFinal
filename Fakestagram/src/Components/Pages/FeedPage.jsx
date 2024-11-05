@@ -16,23 +16,38 @@ const FeedPage = ({ user }) => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        // Inicializa con una publicación de ejemplo
-        const examplePost = {
-            _id: '1',
-            user: {
-                _id: 'user1',
-                username: 'Tito',
-                profilePicture: titoImage,
+        // Inicializa con dos publicaciones de ejemplo
+        const examplePosts = [
+            {
+                _id: '1',
+                user: {
+                    _id: 'user1',
+                    username: 'Tito',
+                    profilePicture: titoImage,
+                },
+                imageUrl: titoImage,
+                likes: [],
+                comments: [],
+                caption: 'Te tengo al lado y me siento solo.',
             },
-            imageUrl: titoImage,
-            likes: [],
-            comments: [],
-            caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
-        };
-
-        setPosts([examplePost]);
+            {
+                _id: '2',
+                user: {
+                    _id: 'user2',
+                    username: 'Tito',
+                    profilePicture: titoImage,
+                },
+                imageUrl: titoImage,
+                likes: [],
+                comments: [],
+                caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
+            },
+        ];
+    
+        setPosts(examplePosts);
         setLoading(false);
     }, []);
+    
 
     const fetchPosts = async () => {
         try {
