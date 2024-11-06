@@ -28,7 +28,7 @@ const FeedPage = ({ user }) => {
                 imageUrl: titoImage,
                 likes: [],
                 comments: [],
-                caption: 'Te tengo al lado y me siento solo.',
+                caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed..',
             },
             {
                 _id: '2',
@@ -40,7 +40,7 @@ const FeedPage = ({ user }) => {
                 imageUrl: titoImage,
                 likes: [],
                 comments: [],
-                caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
+                caption: 'Esta es otra publicación de ejemplo para mostrar cómo funciona el feed.',
             },
         ];
     
