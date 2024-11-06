@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/FeedPage.css';
+import titoImage from '../../Resource/tito.png'; // Importa la imagen
+
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
@@ -14,23 +16,38 @@ const FeedPage = ({ user }) => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        // Inicializa con una publicación de ejemplo
-        const examplePost = {
-            _id: '1',
-            user: {
-                _id: 'user1',
-                username: 'usuario_ejemplo',
-                profilePicture: '/default-avatar.png',
+        // Inicializa con dos publicaciones de ejemplo
+        const examplePosts = [
+            {
+                _id: '1',
+                user: {
+                    _id: 'user1',
+                    username: 'Tito',
+                    profilePicture: titoImage,
+                },
+                imageUrl: titoImage,
+                likes: [],
+                comments: [],
+                caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed..',
             },
-            imageUrl: 'https://via.placeholder.com/600x400',
-            likes: [],
-            comments: [],
-            caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
-        };
-
-        setPosts([examplePost]);
+            {
+                _id: '2',
+                user: {
+                    _id: 'user2',
+                    username: 'Tito',
+                    profilePicture: titoImage,
+                },
+                imageUrl: titoImage,
+                likes: [],
+                comments: [],
+                caption: 'Esta es otra publicación de ejemplo para mostrar cómo funciona el feed.',
+            },
+        ];
+    
+        setPosts(examplePosts);
         setLoading(false);
     }, []);
+    
 
     const fetchPosts = async () => {
         try {
@@ -140,7 +157,7 @@ const FeedPage = ({ user }) => {
                             </div>
 
                             <img 
-                                src={post.imageUrl || 'https://via.placeholder.com/600x400'} 
+                                src={post.imageUrl} 
                                 alt="Post content" 
                                 className="post-image"
                             />
