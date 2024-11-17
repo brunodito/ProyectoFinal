@@ -1,48 +1,70 @@
-/* EditProfilePage.css */
-
-.edit-profile-container {
+.edit-profile-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #E6E6FA;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.profile-picture {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin-bottom: 20px;
-    border: 2px solid #823970;
-}
-
-.edit-form {
-    width: 80%;
-    max-width: 500px;
+    background-color: #fbe4d5; 
+    color: #4b006e;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .edit-profile-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #9c27b0; 
+  }
+  
+  .edit-profile-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.edit-form input[type="text"],
-.edit-form input[type="email"],
-.edit-form input[type="password"] {
-    padding: 10px;
-    border: 2px solid #823970;
-    border-radius: 8px;
-    font-size: 1em;
-}
-
-.edit-form button {
-    background-color: #823970;
-    color: #ffffff;
-    padding: 10px;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .edit-profile-form label {
+    font-weight: bold;
+    color: #4b006e;
+  }
+  
+  .edit-profile-form input {
+    padding: 0.5rem;
+    border: 2px solid #f09494;
+    border-radius: 4px;
+    outline: none;
+    font-size: 1rem;
+  }
+  
+  .edit-profile-form input:focus {
+    border-color: #9c27b0;
+  }
+  
+  .save-button, .cancel-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button {
+    background-color: #ff8a65; 
+    color: #fff;
+  }
+  
+  .save-button:hover {
+    background-color: #ff7043;
+  }
+  
+  .cancel-button {
+    background-color: #b39ddb; 
+    color: #fff;
+  }
+  
+  .cancel-button:hover {
+    background-color: #9575cd;
+  }
+  
