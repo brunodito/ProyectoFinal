@@ -13,7 +13,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
     return (
-        // No necesitas NavigationContainer aquí, Expo lo maneja internamente
         <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Register" component={RegisterPage} />
