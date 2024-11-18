@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "babel-plugin-module-resolver": "^5.0.2",
+    "expo": "^52.0.4",
+    "typescript": "^5.3.3"
+  }
+}
