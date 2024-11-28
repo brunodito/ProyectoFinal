@@ -115,7 +115,7 @@ const UploadImageScreen = () => {
                     <img 
                         src={URL.createObjectURL(selectedImage)} 
                         alt="Vista previa" 
-                        className="preview-image" 
+                        className="image" 
                     />
                 </div>
             )}

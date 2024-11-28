@@ -1,6 +1,7 @@
 .profile-page {
     min-height: 100vh;
-    background-color: white;
+    background-color: white; 
+    max-height: 90%;
   }
   
   /* Header Styles */
@@ -48,6 +49,12 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .imagenGreed{
+    width: 90px;
+    height: 90px;
     object-fit: cover;
   }
   
@@ -99,11 +106,11 @@
     cursor: pointer;
   }
   
-  /* Posts Grid Styles */
   .posts-grid {
+    overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 6px;
     background-color: #fff;
   }
   
@@ -118,7 +125,6 @@
     object-fit: cover;
   }
   
-  /* Bottom Navigation Styles */
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -151,3 +157,5 @@
     border-radius: 50%;
     object-fit: cover;
   }
+
+
