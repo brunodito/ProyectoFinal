@@ -1,74 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/FeedPage.css';
-import titoImage from '../../Resource/tito.png'; // Importa la imagen
 
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
+
 const FeedPage = ({ user }) => {
     const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [newComment, setNewComment] = useState('');
     const [commentingOn, setCommentingOn] = useState(null);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-
+    const userId = String(user._id)
+    
     useEffect(() => {
-        // Inicializa con dos publicaciones de ejemplo
-        const examplePosts = [
-            {
-                _id: '1',
-                user: {
-                    _id: 'user1',
-                    username: 'Tito',
-                    profilePicture: titoImage,
-                },
-                imageUrl: titoImage,
-                likes: [],
-                comments: [],
-                caption: 'Esta es una publicación de ejemplo para mostrar cómo funciona el feed.',
-            },
-            {
-                _id: '2',
-                user: {
-                    _id: 'user2',
-                    username: 'Tito',
-                    profilePicture: titoImage,
-                },
-                imageUrl: titoImage,
-                likes: [],
-                comments: [],
-                caption: 'Esta es otra publicación de ejemplo para mostrar cómo funciona el feed.',
-            },
-        ];
-    
-        setPosts(examplePosts);
-        setLoading(false);
-    }, []);
-    
-
-    const fetchPosts = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/posts/feed`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+        console.log(user)
+        const fetchUsers = async () => {
+          if (!token) {
+            console.error("No hay token");
+            return;
+          }
+          try {
+            const response = await fetch(`${API_BASE_URL}/user/all`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
             });
-
+    
             if (!response.ok) {
-                throw new Error('Error al cargar las publicaciones');
+              throw new Error('Error al cargar los usuarios');
+            }
+    
+            const data = await response.json();
+            console.log('Datos recibidos de la API:', data); 
+    
+            if (data && Array.isArray(data.posts)) {
+              setUsers(data.posts); 
+            } else {
+              console.error('Los datos no contienen un array en la propiedad "posts"');
+              setUsers([]); 
+            }
+    
+            setLoading(false);
+          } catch (err) {
+            console.error(err);
+            setLoading(false);
+          }
+        };
+    
+        fetchUsers();
+      }, [userId, token]);
+
+      useEffect(() => {
+        const fetchFeed = async () => {
+            if (!token) {
+                setError("No hay token de autenticación.");
+                setLoading(false);
+                return;
             }
 
-            const data = await response.json();
-            setPosts(data);
-            setLoading(false);
-        } catch (err) {
-            setError('Error al cargar el feed');
-            setLoading(false);
-        }
-    };
+            try {
+                setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/posts/feed`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error("No autorizado. Verifica tu token.");
+                    }
+                    throw new Error("Error al obtener el feed.");
+                }
+
+                const data = await response.json();
+                console.log(data)
+                setPosts(data); // Suponiendo que `data` es un array de publicaciones
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchFeed();
+    }, [token]);
 
     const handleLike = async (postId) => {
         try {
@@ -157,7 +182,7 @@ const FeedPage = ({ user }) => {
                             </div>
 
                             <img 
-                                src={post.imageUrl} 
+                                src={`http://localhost:3001/${post.imageUrl}`} 
                                 alt="Post content" 
                                 className="post-image"
                             />
@@ -189,8 +214,8 @@ const FeedPage = ({ user }) => {
 
                             <div className="comments-section">
                                 {post.comments.map(comment => (
-                                    <div key={comment._id} className="comment">
-                                        <span className="username">{comment.user?.username}</span> {comment.content}
+                                    <div key={comment.content} className="comment">
+                                        <span className="username">{post.user?.username || 'Usuario'}</span> {comment}
                                     </div>
                                 ))}
                             </div>

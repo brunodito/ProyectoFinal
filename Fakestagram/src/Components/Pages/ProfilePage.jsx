@@ -2,37 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/ProfilePage.css';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:3001/api/user/profile';
 
-const ProfilePage = ({ user }) => {
+export function ProfilePage({ user }) {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-
+  const userId = String(user._id)
+  
   useEffect(() => {
-    fetchUserPosts();
-  }, []);
-
-  const fetchUserPosts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts/user/${user._id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al cargar las publicaciones');
+    console.log(userId);
+    const fetchUserPosts = async () => {
+      if (!token) {
+        console.error("No hay token");
+        return;
       }
+      try {
+        const response = await fetch(`${API_BASE_URL}/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
-      const data = await response.json();
-      setPosts(data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching posts:', err);
-      setLoading(false);
-    }
+        if (!response.ok) {
+          throw new Error('Error al cargar las publicaciones');
+        }
+
+        const data = await response.json();
+        console.log('Datos recibidos de la API:', data); // Verifica que la respuesta sea correcta
+
+        // Verifica que los datos tengan la propiedad "posts" y que sea un array
+        if (data && Array.isArray(data.posts)) {
+          setPosts(data.posts); // Establece las publicaciones
+        } else {
+          console.error('Los datos no contienen un array en la propiedad "posts"');
+          setPosts([]); // Si no hay publicaciones, establece un array vacío
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setLoading(false);
+      }
+    };
+
+    fetchUserPosts();
+  }, [userId, token]);
+
+  const openPostModal = (post) => {
+    setSelectedPost(post); // Establece la publicación seleccionada
+  };
+
+  const closePostModal = () => {
+    setSelectedPost(null); // Cierra el modal
   };
 
   return (
@@ -83,18 +109,44 @@ const ProfilePage = ({ user }) => {
         </button>
       </section>
 
+      {selectedPost && (
+        <div className="modal-overlay" onClick={closePostModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={closePostModal}>X</button>
+            <img
+              src={`http://localhost:3001/${selectedPost.imageUrl}`}
+              alt="Post"
+              className="image"
+            />
+            <div className="modal-details">
+              <h2>{selectedPost.caption}</h2>
+              <p>Likes: {selectedPost.likes}</p>
+              <div className="comments-section">
+                <h3>Comments</h3>
+                {selectedPost.comments?.map((comment, index) => (
+                  <p key={index}>{comment}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Grid of Posts */}
+      {!selectedPost && (
       <section className="posts-grid">
         {posts.map(post => (
           <div key={post._id} className="post-item">
             <img 
-              src={post.imageUrl} 
+              src={`http://localhost:3001/${post.imageUrl}`}
               alt="Post" 
-              className="post-image"
+              className="imagenGreed"
+              onClick={() => openPostModal(post)}
             />
           </div>
         ))}
       </section>
+      )};
 
       {/* Bottom Navigation */}
       <nav className="bottom-nav">
@@ -108,6 +160,6 @@ const ProfilePage = ({ user }) => {
       </nav>
     </div>
   );
-};
+}
 
 export default ProfilePage;
