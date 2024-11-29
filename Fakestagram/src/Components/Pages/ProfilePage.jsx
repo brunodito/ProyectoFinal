@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../Styles/ProfilePage.css';
 
 const API_BASE_URL = 'http://localhost:3001/api/user/profile';
+const API_comentarios_URL = 'http://localhost:3001/api';
 
 export function ProfilePage({ user }) {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,34 @@ export function ProfilePage({ user }) {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const userId = String(user._id)
+  const [commentCache, setCommentCache] = useState({});
+
+
+  const fetchCommentById = async (commentId) => {
+    if (commentCache[commentId]) {
+        return commentCache[commentId];
+    }
+
+    try {
+        const response = await fetch(`${API_comentarios_URL}/posts/comments/${commentId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener el comentario');
+        }
+
+        const data = await response.json();
+        setCommentCache((prevCache) => ({ ...prevCache, [commentId]: data }));
+        return data;
+    } catch (error) {
+        console.error('Error al cargar comentario:', error);
+    }
+  };
   
   useEffect(() => {
     console.log(userId);
@@ -112,7 +141,6 @@ export function ProfilePage({ user }) {
       {selectedPost && (
         <div className="modal-overlay" onClick={closePostModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={closePostModal}>X</button>
             <img
               src={`http://localhost:3001/${selectedPost.imageUrl}`}
               alt="Post"
@@ -123,9 +151,20 @@ export function ProfilePage({ user }) {
               <p>Likes: {selectedPost.likes}</p>
               <div className="comments-section">
                 <h3>Comments</h3>
-                {selectedPost.comments?.map((comment, index) => (
-                  <p key={index}>{comment}</p>
-                ))}
+                <div>
+                  {selectedPost.comments.map((commentId) => {
+                      const comment = commentCache[commentId]; 
+                      if (!comment) {
+                        fetchCommentById(commentId);
+                        return <span key={commentId}>Cargando comentario...</span>;
+                      }
+                      return (
+                      <div key={commentId} className="comment">
+                          <span className="username">{comment.user?.username || 'Usuario'}</span> {comment.content}
+                      </div>
+                      );
+                    })}
+                  </div>
               </div>
             </div>
           </div>
