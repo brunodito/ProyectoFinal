@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/FeedPage.css';
-import titoImage from '../../Resource/tito.png'; // Importa la imagen
 
 
 const API_BASE_URL = 'http://localhost:3001/api';
-const API_BASE_URL2 = 'http://localhost:3001/api/user/profile';
 
 
 const FeedPage = ({ user }) => {
@@ -216,7 +214,7 @@ const FeedPage = ({ user }) => {
 
                             <div className="comments-section">
                                 {post.comments.map(comment => (
-                                    <div key={comment._id} className="comment">
+                                    <div key={comment.content} className="comment">
                                         <span className="username">{post.user?.username || 'Usuario'}</span> {comment}
                                     </div>
                                 ))}
