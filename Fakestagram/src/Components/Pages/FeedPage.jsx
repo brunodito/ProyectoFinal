@@ -2,62 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/FeedPage.css';
 
-
 const API_BASE_URL = 'http://localhost:3001/api';
-
 
 const FeedPage = ({ user }) => {
     const [posts, setPosts] = useState([]);
-    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [newComment, setNewComment] = useState('');
     const [commentingOn, setCommentingOn] = useState(null);
+    const [commentCache, setCommentCache] = useState({});
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-    const userId = String(user._id)
-    
-    useEffect(() => {
-        console.log(user)
-        const fetchUsers = async () => {
-          if (!token) {
-            console.error("No hay token");
-            return;
-          }
-          try {
-            const response = await fetch(`${API_BASE_URL}/user/all`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-            });
-    
-            if (!response.ok) {
-              throw new Error('Error al cargar los usuarios');
-            }
-    
-            const data = await response.json();
-            console.log('Datos recibidos de la API:', data); 
-    
-            if (data && Array.isArray(data.posts)) {
-              setUsers(data.posts); 
-            } else {
-              console.error('Los datos no contienen un array en la propiedad "posts"');
-              setUsers([]); 
-            }
-    
-            setLoading(false);
-          } catch (err) {
-            console.error(err);
-            setLoading(false);
-          }
-        };
-    
-        fetchUsers();
-      }, [userId, token]);
 
-      useEffect(() => {
+    useEffect(() => {
         const fetchFeed = async () => {
             if (!token) {
                 setError("No hay token de autenticación.");
@@ -83,8 +40,7 @@ const FeedPage = ({ user }) => {
                 }
 
                 const data = await response.json();
-                console.log(data)
-                setPosts(data); // Suponiendo que `data` es un array de publicaciones
+                setPosts(data);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -94,6 +50,32 @@ const FeedPage = ({ user }) => {
 
         fetchFeed();
     }, [token]);
+
+    const fetchCommentById = async (commentId) => {
+        if (commentCache[commentId]) {
+            return commentCache[commentId];
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/posts/comments/${commentId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener el comentario');
+            }
+
+            const data = await response.json();
+            setCommentCache((prevCache) => ({ ...prevCache, [commentId]: data }));
+            return data;
+        } catch (error) {
+            console.error('Error al cargar comentario:', error);
+        }
+    };
 
     const handleLike = async (postId) => {
         try {
@@ -117,28 +99,36 @@ const FeedPage = ({ user }) => {
 
     const handleComment = async (postId) => {
         if (!newComment.trim()) return;
-
+    
         try {
             const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ content: newComment })
+                body: JSON.stringify({ content: newComment }),
             });
-
+    
             if (response.ok) {
                 const comment = await response.json();
-                setPosts(posts.map(post => {
-                    if (post._id === postId) {
-                        return {
-                            ...post,
-                            comments: [...post.comments, comment]
-                        };
-                    }
-                    return post;
+    
+                setCommentCache((prevCache) => ({
+                    ...prevCache,
+                    [comment._id]: comment,
                 }));
+    
+                setPosts((prevPosts) =>
+                    prevPosts.map((post) =>
+                        post._id === postId
+                            ? {
+                                  ...post,
+                                  comments: [...post.comments, comment._id],
+                              }
+                            : post
+                    )
+                );
+    
                 setNewComment('');
                 setCommentingOn(null);
             }
@@ -213,11 +203,19 @@ const FeedPage = ({ user }) => {
                             )}
 
                             <div className="comments-section">
-                                {post.comments.map(comment => (
-                                    <div key={comment.content} className="comment">
-                                        <span className="username">{post.user?.username || 'Usuario'}</span> {comment}
-                                    </div>
-                                ))}
+                                {post.comments.map((commentId) => {
+                                    const comment = commentCache[commentId]; 
+                                    if (!comment) {
+                                        fetchCommentById(commentId);
+                                        return <span key={commentId}>Cargando comentario...</span>;
+                                    }
+
+                                    return (
+                                        <div key={commentId} className="comment">
+                                            <span className="username">{comment.user?.username || 'Usuario'}</span> {comment.content}
+                                        </div>
+                                    );
+                                })}
                             </div>
 
                             <div className="timestamp">

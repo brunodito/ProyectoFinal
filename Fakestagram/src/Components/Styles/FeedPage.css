@@ -121,6 +121,7 @@
 }
 
 .comments-section {
+    text-align: left;
     padding: 0 16px;
     max-height: none;
 }
