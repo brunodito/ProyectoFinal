@@ -1,116 +1,75 @@
-/*
 import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  StyleSheet,
+  FlatList,
   Image,
   TouchableOpacity,
   TextInput,
-  FlatList,
-  StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
-const titoImage = require('../assets/images/tito.png');
+const API_BASE_URL = 'http://192.168.1.49:3001/api'; // Reemplaza con tu IP local
 
-const API_BASE_URL = 'http://192.168.1.10:3001/api';
-
-interface User {
-  _id: string;
-  username: string;
-  profilePicture: string;
-}
-
-interface Comment {
-  _id: string;
-  user: User;
-  content: string;
-}
-
-interface Post {
-  _id: string;
-  user: User;
-  imageUrl: string;
-  likes: string[];
-  comments: Comment[];
-  caption: string;
-}
-
-type RootStackParamList = {
-  Feed: undefined;
-  Profile: undefined;
-  Notifications: undefined;
-  Upload: undefined;
-  Search: undefined;
-};
-
-type FeedPageNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Feed'>;
-
-const FeedPage: React.FC<{ user: User | null }> = ({ user }) => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const FeedPage: React.FC = () => {
+  const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
   const [commentingOn, setCommentingOn] = useState<string | null>(null);
-  const navigation = useNavigation<FeedPageNavigationProp>();
-
-  const token = AsyncStorage.getItem('token'); // Almacenar token en AsyncStorage es mejor en apps móviles
+  const navigation = useNavigation();
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const examplePosts: Post[] = [
-      {
-        _id: '1',
-        user: {
-          _id: 'user1',
-          username: 'Tito',
-          profilePicture: titoImage,  // Usando la imagen importada
-        },
-        imageUrl: titoImage,  // Usando la imagen importada
-        likes: [],
-        comments: [],
-        caption: 'Esta es una publicación de ejemplo.',
-      },
-      {
-        _id: '2',
-        user: {
-          _id: 'user2',
-          username: 'Tito',
-          profilePicture: titoImage,  // Usando la imagen importada
-        },
-        imageUrl: titoImage,  // Usando la imagen importada
-        likes: [],
-        comments: [],
-        caption: 'Otra publicación de ejemplo.',
-      },
-    ];
+    const fetchToken = async () => {
+      const savedToken = await AsyncStorage.getItem('token');
+      setToken(savedToken);
+    };
 
-    setPosts(examplePosts);
-    setLoading(false);
+    fetchToken();
   }, []);
 
-  const fetchPosts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts/feed`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al cargar las publicaciones');
+  useEffect(() => {
+    const fetchFeed = async () => {
+      if (!token) {
+        setError('No hay token de autenticación.');
+        setLoading(false);
+        return;
       }
 
-      const data = await response.json();
-      setPosts(data);
-      setLoading(false);
-    } catch (err) {
-      setError('Error al cargar el feed');
-      setLoading(false);
-    }
-  };
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/posts/feed`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('No autorizado. Verifica tu token.');
+          }
+          throw new Error('Error al obtener el feed.');
+        }
+
+        const data = await response.json();
+        setPosts(data);
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    if (token) fetchFeed();
+  }, [token]);
 
   const handleLike = async (postId: string) => {
     try {
@@ -126,7 +85,7 @@ const FeedPage: React.FC<{ user: User | null }> = ({ user }) => {
         setPosts(posts.map(post => (post._id === postId ? updatedPost : post)));
       }
     } catch (error) {
-      console.error('Error al dar like:', error);
+      Alert.alert('Error', 'Error al dar like.');
     }
   };
 
@@ -146,177 +105,166 @@ const FeedPage: React.FC<{ user: User | null }> = ({ user }) => {
       if (response.ok) {
         const comment = await response.json();
         setPosts(posts.map(post =>
-          post._id === postId ? { ...post, comments: [...post.comments, comment] } : post
+          post._id === postId
+            ? { ...post, comments: [...post.comments, comment] }
+            : post
         ));
         setNewComment('');
         setCommentingOn(null);
       }
     } catch (error) {
-      console.error('Error al comentar:', error);
+      Alert.alert('Error', 'Error al agregar el comentario.');
     }
   };
 
-  if (!user) {
-    return <Text>Inicia sesión para ver el contenido del feed.</Text>;
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#0095f6" />
+      </View>
+    );
   }
 
-  return (
-    <View style={styles.feedContainer}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Fakestagram</Text>
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.error}>{error}</Text>
+      </View>
+    );
+  }
+
+  const renderPost = ({ item }: { item: any }) => (
+    <View style={styles.postCard}>
+      <View style={styles.postHeader}>
+        <Image
+          source={{ uri: item.user?.profilePicture || '/default-avatar.png' }}
+          style={styles.avatar}
+        />
+        <Text style={styles.username}>{item.user?.username || 'Usuario desconocido'}</Text>
       </View>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : (
-        <FlatList
-          data={posts}
-          keyExtractor={item => item._id}
-          renderItem={({ item }) => (
-            <View style={styles.postCard}>
-              <View style={styles.postHeader}>
-                <Text style={styles.username}>{item.user.username}</Text>
-              </View>
-              <View style={styles.postActions}>
-                <TouchableOpacity onPress={() => handleLike(item._id)}>
-                  <Text style={styles.likeButton}>{item.likes.length}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setCommentingOn(item._id)}>
-                  <Text style={styles.commentButton}></Text>
-                </TouchableOpacity>
-              </View>
+      <Image source={{ uri: `${API_BASE_URL}/${item.imageUrl}` }} style={styles.postImage} />
 
-              <Text style={styles.caption}>
-                {item.user.username} {item.caption}
-              </Text>
+      <View style={styles.actions}>
+        <TouchableOpacity onPress={() => handleLike(item._id)}>
+          <FontAwesome
+            name={item.likes.includes(token) ? 'heart' : 'heart-o'}
+            size={24}
+            color={item.likes.includes(token) ? '#ed4956' : '#262626'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setCommentingOn(item._id)}>
+          <Ionicons name="chatbubble-outline" size={24} color="#262626" />
+        </TouchableOpacity>
+      </View>
 
-              <View>
-                {item.comments.map(comment => (
-                  <Text key={comment._id} style={styles.comment}>
-                    <Text style={styles.username}>{comment.user.username}: </Text>
-                    {comment.content}
-                  </Text>
-                ))}
-              </View>
+      <Text style={styles.likes}>{item.likes.length} Me gusta</Text>
 
-              <TextInput
-                style={styles.commentInput}
-                placeholder="Añade un comentario..."
-                value={newComment}
-                onChangeText={setNewComment}
-                onSubmitEditing={() => handleComment(item._id)}
-              />
-            </View>
-          )}
-        />
+      {item.caption && (
+        <Text style={styles.caption}>
+          <Text style={styles.username}>{item.user?.username}: </Text>
+          {item.caption}
+        </Text>
       )}
 
-      <View style={styles.navigationBar}>
-        <TouchableOpacity onPress={() => navigation.navigate('Feed')} style={styles.navIcon}>
-          <Text>Feed</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Search')} style={styles.navIcon}>
-          <Text>Buscar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Upload')} style={styles.navIcon}>
-          <Text>Subir foto</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={styles.navIcon}>
-          <Text>Notificaciones</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.navIcon}>
-          <Text>Perfil</Text>
-        </TouchableOpacity>
-      </View>
+      {commentingOn === item._id && (
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            value={newComment}
+            onChangeText={setNewComment}
+            placeholder="Escribe un comentario..."
+          />
+          <TouchableOpacity
+            onPress={() => handleComment(item._id)}
+            disabled={!newComment.trim()}
+          >
+            <Text style={styles.sendButton}>Publicar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
+  );
+
+  return (
+    <FlatList
+      data={posts}
+      renderItem={renderPost}
+      keyExtractor={item => item._id}
+      contentContainerStyle={styles.container}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  feedContainer: {
-    flex: 1,
+  container: {
+    padding: 16,
     backgroundColor: '#fafafa',
   },
-  header: {
-    padding: 16,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#dbdbdb',
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#262626',
-  },
-  errorText: { // Aquí agregamos la propiedad errorText
+  error: {
     color: 'red',
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 16,
   },
   postCard: {
-    backgroundColor: 'white',
-    marginBottom: 10,
-    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 16,
+    padding: 16,
+    elevation: 1,
   },
   postHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    marginBottom: 10,
   },
-  userAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     marginRight: 10,
   },
   username: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 16,
   },
   postImage: {
     width: '100%',
-    height: 300,
-    resizeMode: 'cover',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 10,
   },
-  postActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 8,
-  },
-  likeButton: {
-    color: '#ed4956',
-  },
-  commentButton: {
-    color: '#0095f6',
-  },
-  caption: {
-    padding: 8,
-    fontSize: 14,
-  },
-  comment: {
-    padding: 8,
-    fontSize: 14,
-  },
-  commentInput: {
-    borderTopWidth: 1,
-    borderColor: '#dbdbdb',
-    padding: 8,
-    fontSize: 14,
-  },
-  navigationBar: {
+  actions: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderColor: '#dbdbdb',
+    marginBottom: 10,
   },
-  navIcon: {
-    padding: 10,
+  likes: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  caption: {
+    marginBottom: 10,
+  },
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  commentInput: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    marginRight: 10,
+    padding: 5,
+  },
+  sendButton: {
+    color: '#0095f6',
+    fontWeight: 'bold',
   },
 });
 
 export default FeedPage;
-*/
